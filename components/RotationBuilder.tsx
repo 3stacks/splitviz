@@ -4,6 +4,7 @@ import { useState } from "react";
 import type { Rotation, Family, Session, Exercise } from "@/lib/splitviz";
 import {
   PATTERNS,
+  PATTERN_BY_KEY,
   EXERCISES,
   EXERCISE_BY_KEY,
   familyOf,
@@ -16,6 +17,7 @@ const FAMILY_STYLE: Record<Family, string> = {
   legs: "bg-emerald-50 text-emerald-700 ring-1 ring-emerald-200",
   core: "bg-amber-50 text-amber-700 ring-1 ring-amber-200",
   explosive: "bg-rose-50 text-rose-700 ring-1 ring-rose-200",
+  machine: "bg-zinc-100 text-zinc-700 ring-1 ring-zinc-300",
 };
 
 const FAMILY_DOT: Record<Family, string> = {
@@ -24,6 +26,7 @@ const FAMILY_DOT: Record<Family, string> = {
   legs: "bg-emerald-400",
   core: "bg-amber-400",
   explosive: "bg-rose-400",
+  machine: "bg-zinc-400",
 };
 
 function fractionLabel(w: number): string {
@@ -191,8 +194,19 @@ function SessionCard({
   );
 }
 
+/** Match on exercise name, its muscle breakdown, or its pattern label. */
+function exerciseMatches(e: Exercise, q: string): boolean {
+  if (!q) return true;
+  if (e.name.toLowerCase().includes(q)) return true;
+  if (breakdownText(e).toLowerCase().includes(q)) return true;
+  const pat = PATTERN_BY_KEY[e.pattern];
+  return pat ? pat.label.toLowerCase().includes(q) : false;
+}
+
 function ExercisePicker({ onPick }: { onPick: (key: string) => void }) {
   const [expanded, setExpanded] = useState<Set<string>>(new Set());
+  const [query, setQuery] = useState("");
+  const q = query.trim().toLowerCase();
   const toggle = (k: string) =>
     setExpanded((prev) => {
       const next = new Set(prev);
@@ -200,11 +214,28 @@ function ExercisePicker({ onPick }: { onPick: (key: string) => void }) {
       return next;
     });
 
+  // While searching, drop empty groups and force the rest open.
+  const groups = PATTERNS.map((pat) => ({
+    pat,
+    exs: EXERCISES.filter((e) => e.pattern === pat.key && exerciseMatches(e, q)),
+  })).filter((g) => !q || g.exs.length > 0);
+
   return (
     <div className="mt-2 overflow-hidden rounded-lg border border-slate-200 bg-slate-50">
-      {PATTERNS.map((pat) => {
-        const open = expanded.has(pat.key);
-        const exs = EXERCISES.filter((e) => e.pattern === pat.key);
+      <div className="border-b border-slate-200 p-2">
+        <input
+          autoFocus
+          value={query}
+          onChange={(e) => setQuery(e.target.value)}
+          placeholder="Search exercises or muscles…"
+          className="w-full rounded-md border border-slate-200 bg-white px-2.5 py-1.5 text-xs text-slate-700 placeholder:text-slate-400 focus:border-orange-400 focus:outline-none"
+        />
+      </div>
+      {groups.length === 0 && (
+        <p className="px-3 py-3 text-xs text-slate-400">No exercises match.</p>
+      )}
+      {groups.map(({ pat, exs }) => {
+        const open = q ? true : expanded.has(pat.key);
         return (
           <div key={pat.key} className="border-b border-slate-200 last:border-0">
             <button
@@ -224,7 +255,7 @@ function ExercisePicker({ onPick }: { onPick: (key: string) => void }) {
                   <button
                     key={e.key}
                     onClick={() => onPick(e.key)}
-                    className={`flex flex-col items-start gap-0.5 rounded-md px-2 py-1.5 text-left transition-colors hover:brightness-95 ${FAMILY_STYLE[pat.family]}`}
+                    className={`flex flex-col items-start gap-0.5 rounded-md px-2 py-1.5 text-left transition-colors hover:brightness-95 ${FAMILY_STYLE[familyOf(e)]}`}
                   >
                     <span className="text-xs font-medium">+ {e.name}</span>
                     <span className="text-[10px] font-normal opacity-70">

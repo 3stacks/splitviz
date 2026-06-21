@@ -43,7 +43,7 @@ export const GROUP_BY_KEY: Record<string, Group> = Object.fromEntries(
   GROUPS.map((g) => [g.key, g]),
 );
 
-export type Family = "push" | "pull" | "legs" | "core" | "explosive";
+export type Family = "push" | "pull" | "legs" | "core" | "explosive" | "machine";
 
 /** Movement patterns — the collapsible groups in the exercise picker. */
 export interface MovementPattern {
@@ -63,6 +63,7 @@ export const PATTERNS: MovementPattern[] = [
   { key: "calf", label: "Calves", family: "legs" },
   { key: "core", label: "Core / carry", family: "core" },
   { key: "explosive", label: "Explosive / Olympic", family: "explosive" },
+  { key: "machines", label: "Machines", family: "machine" },
 ];
 
 export const PATTERN_BY_KEY: Record<string, MovementPattern> = Object.fromEntries(
@@ -74,6 +75,10 @@ export interface Exercise {
   name: string;
   /** Which movement pattern this lives under (the picker group). */
   pattern: string;
+  /** Colour-family override. Machines live in the equipment-based "Machines"
+   *  group but keep their functional colour (pec dec = push). Defaults to the
+   *  pattern's family. */
+  family?: Family;
   /** Per-set muscle involvement: 1 = primary mover, <1 = secondary (faint). */
   weights: Partial<Record<GroupKey, number>>;
 }
@@ -142,6 +147,17 @@ export const EXERCISES: Exercise[] = [
   { key: "powersnatch", name: "Power snatch", pattern: "explosive", weights: { glutes: 1, hamstrings: 1, lowerBack: 1, traps: 1, quads: 0.5, sideDelts: 0.5, forearms: 0.5, calves: 0.5 } },
   { key: "highpull", name: "High pull", pattern: "explosive", weights: { traps: 1, lowerBack: 1, glutes: 0.75, hamstrings: 0.75, rearDelts: 0.5, forearms: 0.5 } },
   { key: "powershrug", name: "Power shrug", pattern: "explosive", weights: { traps: 1, lowerBack: 0.5, glutes: 0.5, hamstrings: 0.5, forearms: 0.5 } },
+
+  // — machines / cables (equipment group; each keeps its functional colour) —
+  { key: "legext", name: "Leg extension", pattern: "machines", family: "legs", weights: { quads: 1 } },
+  { key: "pecdec", name: "Pec dec (chest fly)", pattern: "machines", family: "push", weights: { chest: 1 } },
+  { key: "chestpressmachine", name: "Chest press (machine)", pattern: "machines", family: "push", weights: { chest: 1, triceps: 0.5, frontDelts: 0.5 } },
+  { key: "shoulderpressmachine", name: "Shoulder press (machine)", pattern: "machines", family: "push", weights: { frontDelts: 1, sideDelts: 0.5, triceps: 0.5 } },
+  { key: "reversepecdec", name: "Reverse pec dec", pattern: "machines", family: "pull", weights: { rearDelts: 1 } },
+  { key: "seatedrowmachine", name: "Seated row (machine)", pattern: "machines", family: "pull", weights: { lats: 1, rearDelts: 0.5, traps: 0.5, biceps: 0.5 } },
+  { key: "pushdown", name: "Triceps pushdown (cable)", pattern: "machines", family: "push", weights: { triceps: 1 } },
+  { key: "preachercurl", name: "Preacher curl (machine)", pattern: "machines", family: "pull", weights: { biceps: 1, forearms: 0.25 } },
+  { key: "hipabduction", name: "Hip abduction (machine)", pattern: "machines", family: "legs", weights: { glutes: 1 } },
 ];
 
 export const EXERCISE_BY_KEY: Record<string, Exercise> = Object.fromEntries(
@@ -150,7 +166,7 @@ export const EXERCISE_BY_KEY: Record<string, Exercise> = Object.fromEntries(
 
 /** Family (colour) of an exercise, via its pattern. */
 export function familyOf(ex: Exercise): Family {
-  return PATTERN_BY_KEY[ex.pattern]?.family ?? "core";
+  return ex.family ?? PATTERN_BY_KEY[ex.pattern]?.family ?? "core";
 }
 
 /** An exercise's per-set muscle contributions, heaviest first, for display. */

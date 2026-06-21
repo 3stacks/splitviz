@@ -14,10 +14,13 @@ exercise (per-set weights)  →  muscle group  →  SVG region(s)
 "bench press" {chest:1, triceps:0.5, frontDelts:0.5}  →  chest…  →  paths on figure
 ```
 
-You add **specific exercises** to each session, picked from a collapsible list
-grouped by **movement pattern** (horizontal push, … , explosive/Olympic). Each
+You add **specific exercises** to each session, searched or picked from a
+collapsible list grouped by **movement pattern** (horizontal push, … ,
+explosive/Olympic) plus a **Machines** group for isolation/cable work. Each
 exercise carries per-set muscle **weights**: `1` = primary mover, `<1` =
-secondary. Generic "(any)" entries per pattern stay available for coarse entry.
+secondary. Machines keep their functional colour (pec dec = push) though they sit
+in the equipment group. Generic "(any)" entries per pattern stay available for
+coarse entry.
 
 - **Frequency = sessions across the whole rotation ÷ rotation length in weeks.**
   An alternating L/U/L · U/L/U reads **1.5×/week** for each of upper and lower
@@ -95,13 +98,16 @@ highest-powered dose–response evidence finds *more is more* with diminishing r
 and no clear plateau — but for heavy, near-failure work in a drug-free lifter, sets
 past ~6–10 mostly buy fatigue, because a heavy set banks most of its stimulus in a
 few effective reps and costs more recovery. These span **both camps on purpose** —
-the high-volume papers the line departs from, and the effective-reps / lower-volume
-case it rests on.
+the high-volume papers the line departs from, and the effort-over-volume / effective-
+reps case it rests on, whose peer-reviewed backbone is the Fisher–Steele
+recommendations and the Minor–Helms–Schepis rebuttal of RP's MRV-progression model.
 
 - [Stronger by Science — Set Volume for Muscle Growth](https://www.strongerbyscience.com/volume/) — dose–response, diminishing returns, no clear plateau
 - [Pelland et al. 2024 — training dose–response meta](https://pubmed.ncbi.nlm.nih.gov/41343037/) — tracks volume to ~40–50 sets/muscle; the high-volume case
 - [Beardsley — stimulating (effective) reps](https://www.patreon.com/posts/stimulating-reps-99706085) — ~5 growth-driving reps per heavy set
 - [Beardsley — junk volume](https://www.patreon.com/SandCResearch/posts/junk-volume-83579414) — sets past the stimulus mostly add fatigue
+- [Fisher, Steele, Bruce-Low & Smith 2011 — Evidence-Based Resistance Training Recommendations](https://pure.solent.ac.uk/ws/files/10205168/ms_2011_03_08_Fisher.pdf) — *peer-reviewed*: intensity of **effort**, not volume, is the primary driver
+- [Minor, Helms & Schepis 2020 — RE: Mesocycle Progression in Hypertrophy](https://www.docdroid.net/bpAoChw/minor-b-et-al-2020-re-mesocycle-progression-in-hypertrophy-volume-versus-intensity-pdf) — *peer-reviewed* rebuttal (Strength & Conditioning Journal) of RP's progress-volume-to-MRV model
 - [Renaissance Periodization — volume landmarks](https://rpstrength.com/blogs/articles/training-volume-landmarks-muscle-growth) — MEV/MAV/MRV; heavy compounds have lower MRV
 - [Set for Set — is low-volume training effective?](https://www.setforset.com/blogs/news/is-low-volume-training-effective-for-muscle-growth-and-strength) — MEV ~4 hard sets
 - [Full Range Strength — critique of high-volume conclusions](https://www.fullrangestrength.com/schoenfeld-training-volume.html) — viewpoint: effort over volume

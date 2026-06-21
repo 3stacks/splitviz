@@ -37,6 +37,8 @@ const REFERENCES: { title: string; href: string; note: string }[] = [
   { title: "Pelland et al. 2024 — training dose–response meta", href: "https://pubmed.ncbi.nlm.nih.gov/41343037/", note: "tracks volume to ~40–50 sets; the high-volume case" },
   { title: "Beardsley — stimulating (effective) reps", href: "https://www.patreon.com/posts/stimulating-reps-99706085", note: "~5 growth-driving reps per heavy set" },
   { title: "Beardsley — junk volume", href: "https://www.patreon.com/SandCResearch/posts/junk-volume-83579414", note: "sets past the stimulus mostly add fatigue" },
+  { title: "Fisher, Steele et al. 2011 — Evidence-Based Resistance Training Recommendations", href: "https://pure.solent.ac.uk/ws/files/10205168/ms_2011_03_08_Fisher.pdf", note: "peer-reviewed: intensity of effort, not volume, is the primary driver" },
+  { title: "Minor, Helms & Schepis 2020 — RE: Mesocycle Progression in Hypertrophy", href: "https://www.docdroid.net/bpAoChw/minor-b-et-al-2020-re-mesocycle-progression-in-hypertrophy-volume-versus-intensity-pdf", note: "peer-reviewed rebuttal of RP's progress-volume-to-MRV model" },
   { title: "Renaissance Periodization — volume landmarks", href: "https://rpstrength.com/blogs/articles/training-volume-landmarks-muscle-growth", note: "MEV/MAV/MRV; heavy compounds have lower MRV" },
   { title: "Set for Set — is low-volume training effective?", href: "https://www.setforset.com/blogs/news/is-low-volume-training-effective-for-muscle-growth-and-strength", note: "MEV ~4 hard sets" },
   { title: "Full Range Strength — critique of high-volume conclusions", href: "https://www.fullrangestrength.com/schoenfeld-training-volume.html", note: "viewpoint: effort over volume" },
