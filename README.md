@@ -15,12 +15,15 @@ exercise (per-set weights)  →  muscle group  →  SVG region(s)
 ```
 
 You add **specific exercises** to each session, searched or picked from a
-collapsible list grouped by **movement pattern** (horizontal push, … ,
-explosive/Olympic) plus a **Machines** group for isolation/cable work. Each
-exercise carries per-set muscle **weights**: `1` = primary mover, `<1` =
-secondary. Machines keep their functional colour (pec dec = push) though they sit
-in the equipment group. Generic "(any)" entries per pattern stay available for
-coarse entry.
+collapsible list. Categories are a **hybrid**: compounds grouped by **movement
+pattern** (horizontal/vertical push & pull, squat, hinge, lunge, explosive),
+isolation grouped **by muscle** (Shoulders, Biceps, Triceps, Calves, Core) — so
+curls and extensions sit where people look for them, not under "vertical pull" —
+plus a **Machines** equipment group. Each exercise carries per-set muscle
+**weights**: `1` = primary mover, `<1` = secondary. Colour follows *function*
+(pec dec = push, face pull = pull) even inside the muscle/equipment groups, so the
+session-card push/pull/legs balance still reads true. Generic "(any)" entries per
+compound pattern stay available for coarse entry.
 
 - **Frequency = sessions across the whole rotation ÷ rotation length in weeks.**
   An alternating L/U/L · U/L/U reads **1.5×/week** for each of upper and lower

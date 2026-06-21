@@ -53,6 +53,7 @@ export interface MovementPattern {
 }
 
 export const PATTERNS: MovementPattern[] = [
+  // compounds — movement patterns
   { key: "horizontal-push", label: "Horizontal push", family: "push" },
   { key: "vertical-push", label: "Vertical push", family: "push" },
   { key: "horizontal-pull", label: "Horizontal pull", family: "pull" },
@@ -60,9 +61,14 @@ export const PATTERNS: MovementPattern[] = [
   { key: "squat", label: "Squat (knee)", family: "legs" },
   { key: "hinge", label: "Hinge (hip)", family: "legs" },
   { key: "lunge", label: "Lunge (unilateral)", family: "legs" },
+  { key: "explosive", label: "Explosive / Olympic", family: "explosive" },
+  // isolation — by muscle (where curls, extensions, raises actually belong)
+  { key: "shoulders", label: "Shoulders (delts)", family: "push" },
+  { key: "biceps", label: "Biceps", family: "pull" },
+  { key: "triceps", label: "Triceps", family: "push" },
   { key: "calf", label: "Calves", family: "legs" },
   { key: "core", label: "Core / carry", family: "core" },
-  { key: "explosive", label: "Explosive / Olympic", family: "explosive" },
+  // equipment
   { key: "machines", label: "Machines", family: "machine" },
 ];
 
@@ -83,80 +89,127 @@ export interface Exercise {
   weights: Partial<Record<GroupKey, number>>;
 }
 
-// Library: a coarse "(any)" generic per pattern (back-compat with the old keys),
-// plus specific lifts. Every exercise must have ≥1 muscle at 1.0, or it trains
-// nothing as a primary and stays invisible to the frequency count.
+// Library: compounds grouped by movement PATTERN (each with a coarse "(any)"
+// generic, back-compat with old keys), isolation grouped BY MUSCLE (Shoulders /
+// Biceps / Triceps / Calves / Core), and a Machines equipment group. Every
+// exercise must have ≥1 muscle at 1.0, or it trains nothing as a primary and
+// stays invisible to the frequency count.
 export const EXERCISES: Exercise[] = [
+  // ── compounds ──────────────────────────────────────────────────────────
   // — horizontal push —
   { key: "hpush", name: "Horizontal push (any)", pattern: "horizontal-push", weights: { chest: 1, frontDelts: 1, triceps: 1, core: 0.5 } },
   { key: "bench", name: "Bench press", pattern: "horizontal-push", weights: { chest: 1, triceps: 0.5, frontDelts: 0.5 } },
   { key: "inclinebench", name: "Incline bench press", pattern: "horizontal-push", weights: { chest: 1, frontDelts: 0.75, triceps: 0.5 } },
+  { key: "declinebench", name: "Decline bench press", pattern: "horizontal-push", weights: { chest: 1, triceps: 0.5 } },
+  { key: "dbbench", name: "Dumbbell bench press", pattern: "horizontal-push", weights: { chest: 1, triceps: 0.5, frontDelts: 0.5 } },
+  { key: "closegripbench", name: "Close-grip bench press", pattern: "horizontal-push", weights: { triceps: 1, chest: 0.75, frontDelts: 0.5 } },
   { key: "dip", name: "Dip", pattern: "horizontal-push", weights: { chest: 1, triceps: 0.75, frontDelts: 0.5 } },
   { key: "pushup", name: "Push-up", pattern: "horizontal-push", weights: { chest: 1, triceps: 0.5, frontDelts: 0.5, core: 0.25 } },
-  { key: "tricepext", name: "Triceps extension", pattern: "horizontal-push", weights: { triceps: 1 } },
 
   // — vertical push —
   { key: "vpush", name: "Vertical push (any)", pattern: "vertical-push", weights: { frontDelts: 1, sideDelts: 1, triceps: 1, chest: 0.5, traps: 0.5 } },
   { key: "ohp", name: "Overhead press", pattern: "vertical-push", weights: { frontDelts: 1, sideDelts: 0.5, triceps: 0.5, traps: 0.25 } },
-  { key: "lateralraise", name: "Lateral raise", pattern: "vertical-push", weights: { sideDelts: 1 } },
+  { key: "pushpress", name: "Push press", pattern: "vertical-push", weights: { frontDelts: 1, sideDelts: 0.5, triceps: 0.5, traps: 0.25 } },
+  { key: "dbshoulderpress", name: "Dumbbell shoulder press", pattern: "vertical-push", weights: { frontDelts: 1, sideDelts: 0.5, triceps: 0.5 } },
+  { key: "arnoldpress", name: "Arnold press", pattern: "vertical-push", weights: { frontDelts: 1, sideDelts: 0.75, triceps: 0.5 } },
 
   // — horizontal pull —
   { key: "hpull", name: "Horizontal pull (any)", pattern: "horizontal-pull", weights: { lats: 1, traps: 1, rearDelts: 1, biceps: 1, forearms: 0.5, lowerBack: 0.5 } },
   { key: "row", name: "Barbell row", pattern: "horizontal-pull", weights: { lats: 1, traps: 0.75, rearDelts: 0.5, biceps: 0.5, lowerBack: 0.5 } },
-  { key: "facepull", name: "Face pull", pattern: "horizontal-pull", weights: { rearDelts: 1, traps: 0.5 } },
-  { key: "shrug", name: "Shrug", pattern: "horizontal-pull", weights: { traps: 1, forearms: 0.25 } },
+  { key: "pendlayrow", name: "Pendlay row", pattern: "horizontal-pull", weights: { lats: 1, traps: 0.75, rearDelts: 0.5, biceps: 0.5, lowerBack: 0.5 } },
+  { key: "dbrow", name: "Dumbbell row", pattern: "horizontal-pull", weights: { lats: 1, traps: 0.5, rearDelts: 0.5, biceps: 0.5 } },
+  { key: "tbarrow", name: "T-bar row", pattern: "horizontal-pull", weights: { lats: 1, traps: 0.75, rearDelts: 0.5, biceps: 0.5 } },
 
   // — vertical pull —
   { key: "vpull", name: "Vertical pull (any)", pattern: "vertical-pull", weights: { lats: 1, biceps: 1, rearDelts: 0.5, traps: 0.5, forearms: 0.5 } },
   { key: "pullup", name: "Pull-up", pattern: "vertical-pull", weights: { lats: 1, biceps: 0.5, rearDelts: 0.25, forearms: 0.5 } },
+  { key: "chinup", name: "Chin-up", pattern: "vertical-pull", weights: { lats: 1, biceps: 0.75, forearms: 0.5 } },
   { key: "latpulldown", name: "Lat pulldown", pattern: "vertical-pull", weights: { lats: 1, biceps: 0.5, rearDelts: 0.25 } },
-  { key: "curl", name: "Biceps curl", pattern: "vertical-pull", weights: { biceps: 1, forearms: 0.5 } },
+  { key: "straightarmpulldown", name: "Straight-arm pulldown", pattern: "vertical-pull", weights: { lats: 1, triceps: 0.25 } },
 
   // — squat —
   { key: "squat", name: "Squat (any)", pattern: "squat", weights: { quads: 1, glutes: 1, adductors: 0.5, lowerBack: 0.5, hamstrings: 0.5 } },
   { key: "backsquat", name: "Back squat", pattern: "squat", weights: { quads: 1, glutes: 0.75, adductors: 0.5, lowerBack: 0.5 } },
   { key: "frontsquat", name: "Front squat", pattern: "squat", weights: { quads: 1, glutes: 0.5, core: 0.5, lowerBack: 0.5 } },
+  { key: "hacksquat", name: "Hack squat", pattern: "squat", weights: { quads: 1, glutes: 0.5 } },
+  { key: "gobletsquat", name: "Goblet squat", pattern: "squat", weights: { quads: 1, glutes: 0.5, core: 0.25 } },
   { key: "legpress", name: "Leg press", pattern: "squat", weights: { quads: 1, glutes: 0.5 } },
 
   // — hinge —
   { key: "hinge", name: "Hinge (any)", pattern: "hinge", weights: { hamstrings: 1, glutes: 1, lowerBack: 1, lats: 0.5, forearms: 0.5, adductors: 0.5 } },
   { key: "rdl", name: "Romanian deadlift", pattern: "hinge", weights: { hamstrings: 1, glutes: 0.75, lowerBack: 0.5 } },
   { key: "deadlift", name: "Deadlift", pattern: "hinge", weights: { hamstrings: 1, glutes: 1, lowerBack: 1, traps: 0.5, quads: 0.5, forearms: 0.5 } },
+  { key: "sumodeadlift", name: "Sumo deadlift", pattern: "hinge", weights: { glutes: 1, quads: 0.75, hamstrings: 0.5, lowerBack: 0.75, traps: 0.5, forearms: 0.5, adductors: 0.5 } },
+  { key: "goodmorning", name: "Good morning", pattern: "hinge", weights: { hamstrings: 1, glutes: 0.75, lowerBack: 0.75 } },
   { key: "hipthrust", name: "Hip thrust", pattern: "hinge", weights: { glutes: 1, hamstrings: 0.5 } },
+  { key: "backext", name: "Back extension", pattern: "hinge", weights: { lowerBack: 1, glutes: 0.5, hamstrings: 0.5 } },
   { key: "legcurl", name: "Leg curl", pattern: "hinge", weights: { hamstrings: 1 } },
 
   // — lunge —
   { key: "lunge", name: "Lunge (any)", pattern: "lunge", weights: { quads: 1, glutes: 1, hamstrings: 0.5, adductors: 0.5, calves: 0.5 } },
   { key: "walkinglunge", name: "Walking lunge", pattern: "lunge", weights: { quads: 1, glutes: 0.75, hamstrings: 0.25, adductors: 0.25 } },
+  { key: "reverselunge", name: "Reverse lunge", pattern: "lunge", weights: { quads: 1, glutes: 0.75, hamstrings: 0.25 } },
   { key: "bulgarian", name: "Bulgarian split squat", pattern: "lunge", weights: { quads: 1, glutes: 0.75, adductors: 0.25 } },
-
-  // — calves —
-  { key: "calfraise", name: "Calf raise", pattern: "calf", weights: { calves: 1 } },
-
-  // — core / carry —
-  { key: "core", name: "Core / carry (any)", pattern: "core", weights: { core: 1, lowerBack: 0.5, forearms: 0.5 } },
-  { key: "plank", name: "Plank", pattern: "core", weights: { core: 1, lowerBack: 0.25 } },
-  { key: "hangingleg", name: "Hanging leg raise", pattern: "core", weights: { core: 1, forearms: 0.25 } },
-  { key: "cablecrunch", name: "Cable crunch", pattern: "core", weights: { core: 1 } },
-  { key: "farmercarry", name: "Farmer's carry", pattern: "core", weights: { forearms: 1, traps: 0.75, core: 0.5 } },
+  { key: "stepup", name: "Step-up", pattern: "lunge", weights: { quads: 1, glutes: 0.5 } },
 
   // — explosive / Olympic —
   { key: "snatch", name: "Snatch", pattern: "explosive", weights: { glutes: 1, hamstrings: 1, lowerBack: 1, traps: 1, quads: 0.75, sideDelts: 0.5, forearms: 0.5, calves: 0.5, core: 0.5 } },
   { key: "cleanjerk", name: "Clean & jerk", pattern: "explosive", weights: { glutes: 1, hamstrings: 1, lowerBack: 1, traps: 1, quads: 0.75, frontDelts: 0.5, triceps: 0.5, forearms: 0.5, calves: 0.5, core: 0.5 } },
   { key: "powerclean", name: "Power clean", pattern: "explosive", weights: { glutes: 1, hamstrings: 1, lowerBack: 1, traps: 1, quads: 0.5, forearms: 0.5, calves: 0.5, core: 0.5 } },
   { key: "powersnatch", name: "Power snatch", pattern: "explosive", weights: { glutes: 1, hamstrings: 1, lowerBack: 1, traps: 1, quads: 0.5, sideDelts: 0.5, forearms: 0.5, calves: 0.5 } },
+  { key: "cleanpull", name: "Clean pull", pattern: "explosive", weights: { traps: 1, lowerBack: 1, glutes: 0.75, hamstrings: 0.75, quads: 0.5, forearms: 0.5 } },
   { key: "highpull", name: "High pull", pattern: "explosive", weights: { traps: 1, lowerBack: 1, glutes: 0.75, hamstrings: 0.75, rearDelts: 0.5, forearms: 0.5 } },
   { key: "powershrug", name: "Power shrug", pattern: "explosive", weights: { traps: 1, lowerBack: 0.5, glutes: 0.5, hamstrings: 0.5, forearms: 0.5 } },
+  { key: "jumpsquat", name: "Jump squat", pattern: "explosive", weights: { quads: 1, glutes: 0.75, calves: 0.5 } },
 
-  // — machines / cables (equipment group; each keeps its functional colour) —
-  { key: "legext", name: "Leg extension", pattern: "machines", family: "legs", weights: { quads: 1 } },
+  // ── isolation (by muscle) ──────────────────────────────────────────────
+  // — shoulders / delts (push group; rear-delt & trap work overrides to pull) —
+  { key: "lateralraise", name: "Lateral raise", pattern: "shoulders", weights: { sideDelts: 1 } },
+  { key: "cablelateral", name: "Cable lateral raise", pattern: "shoulders", weights: { sideDelts: 1 } },
+  { key: "frontraise", name: "Front raise", pattern: "shoulders", weights: { frontDelts: 1 } },
+  { key: "reardeltfly", name: "Rear-delt fly", pattern: "shoulders", family: "pull", weights: { rearDelts: 1 } },
+  { key: "facepull", name: "Face pull", pattern: "shoulders", family: "pull", weights: { rearDelts: 1, traps: 0.5 } },
+  { key: "uprightrow", name: "Upright row", pattern: "shoulders", family: "pull", weights: { sideDelts: 1, traps: 0.75, biceps: 0.25 } },
+  { key: "shrug", name: "Shrug", pattern: "shoulders", family: "pull", weights: { traps: 1, forearms: 0.25 } },
+
+  // — biceps —
+  { key: "curl", name: "Biceps curl", pattern: "biceps", weights: { biceps: 1, forearms: 0.5 } },
+  { key: "dbcurl", name: "Dumbbell curl", pattern: "biceps", weights: { biceps: 1, forearms: 0.5 } },
+  { key: "hammercurl", name: "Hammer curl", pattern: "biceps", weights: { biceps: 1, forearms: 0.75 } },
+  { key: "preachercurl", name: "Preacher curl", pattern: "biceps", weights: { biceps: 1, forearms: 0.25 } },
+  { key: "inclinecurl", name: "Incline curl", pattern: "biceps", weights: { biceps: 1, forearms: 0.25 } },
+  { key: "cablecurl", name: "Cable curl", pattern: "biceps", weights: { biceps: 1, forearms: 0.5 } },
+
+  // — triceps —
+  { key: "tricepext", name: "Triceps extension", pattern: "triceps", weights: { triceps: 1 } },
+  { key: "pushdown", name: "Triceps pushdown (cable)", pattern: "triceps", weights: { triceps: 1 } },
+  { key: "skullcrusher", name: "Skull crusher", pattern: "triceps", weights: { triceps: 1 } },
+  { key: "overheadext", name: "Overhead triceps extension", pattern: "triceps", weights: { triceps: 1 } },
+  { key: "kickback", name: "Triceps kickback", pattern: "triceps", weights: { triceps: 1 } },
+
+  // — calves —
+  { key: "calfraise", name: "Standing calf raise", pattern: "calf", weights: { calves: 1 } },
+  { key: "seatedcalf", name: "Seated calf raise", pattern: "calf", weights: { calves: 1 } },
+  { key: "legpresscalf", name: "Leg-press calf raise", pattern: "calf", weights: { calves: 1 } },
+
+  // — core / carry —
+  { key: "core", name: "Core / carry (any)", pattern: "core", weights: { core: 1, lowerBack: 0.5, forearms: 0.5 } },
+  { key: "plank", name: "Plank", pattern: "core", weights: { core: 1, lowerBack: 0.25 } },
+  { key: "hangingleg", name: "Hanging leg raise", pattern: "core", weights: { core: 1, forearms: 0.25 } },
+  { key: "cablecrunch", name: "Cable crunch", pattern: "core", weights: { core: 1 } },
+  { key: "abwheel", name: "Ab wheel rollout", pattern: "core", weights: { core: 1, lats: 0.25 } },
+  { key: "russiantwist", name: "Russian twist", pattern: "core", weights: { core: 1 } },
+  { key: "farmercarry", name: "Farmer's carry", pattern: "core", weights: { forearms: 1, traps: 0.75, core: 0.5 } },
+
+  // ── machines / cables (equipment browse; functional colour per exercise) ──
+  // Isolation that has its own muscle group lives there; this group keeps
+  // machine compound presses/rows plus chest/leg isolation (no dedicated group).
   { key: "pecdec", name: "Pec dec (chest fly)", pattern: "machines", family: "push", weights: { chest: 1 } },
+  { key: "cablefly", name: "Cable fly", pattern: "machines", family: "push", weights: { chest: 1 } },
   { key: "chestpressmachine", name: "Chest press (machine)", pattern: "machines", family: "push", weights: { chest: 1, triceps: 0.5, frontDelts: 0.5 } },
   { key: "shoulderpressmachine", name: "Shoulder press (machine)", pattern: "machines", family: "push", weights: { frontDelts: 1, sideDelts: 0.5, triceps: 0.5 } },
-  { key: "reversepecdec", name: "Reverse pec dec", pattern: "machines", family: "pull", weights: { rearDelts: 1 } },
   { key: "seatedrowmachine", name: "Seated row (machine)", pattern: "machines", family: "pull", weights: { lats: 1, rearDelts: 0.5, traps: 0.5, biceps: 0.5 } },
-  { key: "pushdown", name: "Triceps pushdown (cable)", pattern: "machines", family: "push", weights: { triceps: 1 } },
-  { key: "preachercurl", name: "Preacher curl (machine)", pattern: "machines", family: "pull", weights: { biceps: 1, forearms: 0.25 } },
+  { key: "legext", name: "Leg extension", pattern: "machines", family: "legs", weights: { quads: 1 } },
   { key: "hipabduction", name: "Hip abduction (machine)", pattern: "machines", family: "legs", weights: { glutes: 1 } },
 ];
 
