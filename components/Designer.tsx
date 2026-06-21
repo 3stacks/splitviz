@@ -47,7 +47,7 @@ const REFERENCES: { title: string; href: string; note: string }[] = [
 export function Designer() {
   const [rotation, setRotation] = useState<Rotation>(SEED_ROTATION);
   const [target, setTarget] = useState(2);
-  const [figure, setFigure] = useState<"female" | "male">("female");
+  const [figure, setFigure] = useState<"female" | "male">("male");
   const [hydrated, setHydrated] = useState(false);
 
   useEffect(() => {
