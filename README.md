@@ -73,6 +73,22 @@ bun install
 bun run dev   # http://localhost:3220
 ```
 
+## Deploy
+
+Fully static — `next.config.ts` sets `output: "export"`, so `bun run build` emits a
+static `out/` dir. [`.github/workflows/deploy.yml`](.github/workflows/deploy.yml)
+builds it and uploads to **Cloudflare Pages** (project `splitviz`) via Wrangler on
+every push to `main` (and via manual *Run workflow*).
+
+One-time setup:
+
+- **Org secret** `CLOUDFLARE_API_TOKEN` (org → Settings → Secrets and variables →
+  Actions) — a Cloudflare API token with the **Cloudflare Pages : Edit** permission.
+  If the secret is scoped to *selected repositories*, grant `splitviz` access. The
+  account ID is inlined in the workflow (it's not a secret).
+- The Pages project must be **Direct Upload** (not Git-connected), and its
+  **production branch** set to `main` so `--branch=main` deploys land as production.
+
 ## Code map
 
 - `lib/splitviz.ts` — `GROUPS`, `PATTERNS` (collapsible groups), `EXERCISES` (the

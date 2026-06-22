@@ -1,0 +1,43 @@
+name: Deploy to Cloudflare Pages
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+# One deploy at a time per ref; cancel an in-progress run if a newer push lands.
+concurrency:
+  group: cf-pages-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+
+      - name: Install dependencies
+        run: bun install --frozen-lockfile
+
+      - name: Build static export
+        run: bun run build # next.config.ts sets output: "export" -> emits ./out
+
+      - name: Deploy to Cloudflare Pages
+        uses: cloudflare/wrangler-action@v3
+        with:
+          # CLOUDFLARE_API_TOKEN is an org-level secret (grant this repo access if
+          # it's scoped to selected repos). The account ID is not sensitive (it
+          # appears in dashboard URLs), so it's inlined here.
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: 66bbbf59d9ee8948f770553dfc0d5721
+          # --branch=main makes this a *production* deploy, provided the Pages
+          # project's production branch is also "main" (see repo README).
+          command: pages deploy out --project-name=splitviz --branch=main
